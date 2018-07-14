@@ -1,0 +1,578 @@
+<!doctype html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+		<link rel="icon" type="image/png" href="icons/favicon.png" id="favicon"/>
+		<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+    	<script src="https://vk.com/js/api/openapi.js?105" type="text/javascript"></script>
+    	<script src="js/jquery.js" type="text/javascript"></script>
+    	<script src="js/jquery-ui.js" type="text/javascript"></script>
+		<script src="js/settings.js" type="text/javascript"></script>
+		<script src="js/log.js" type="text/javascript"></script>
+		<script src="js/counter.js" type="text/javascript"></script>
+    	<script src="js/quadtree.js" type="text/javascript"></script>
+    	<script src="js/three.js" type="text/javascript"></script>
+    	<script src="js/zoom-controls.js" type="text/javascript"></script>
+    	<script src="js/widget.js" type="text/javascript"></script>
+    	<script src="js/utility.js" type="text/javascript"></script>
+    	<script src="js/db.js" type="text/javascript"></script>
+    	<script src="js/data-manager.js" type="text/javascript"></script>
+    	<script src="js/chart.js" type="text/javascript"></script>
+    	<script src="js/canvas-chart.js" type="text/javascript"></script>
+    	<script src="js/canvas-time.js" type="text/javascript"></script>
+    	<script src="js/canvas-mini-chart.js" type="text/javascript"></script>
+    	<script src="js/table-top.js" type="text/javascript"></script>
+    	<script src="js/export-module.js" type="text/javascript"></script>
+    	<script src="js/animation-webgl.js" type="text/javascript"></script>
+    	<script src="js/animation-canvas.js" type="text/javascript"></script>
+    	<script src="js/canvas-top.js" type="text/javascript"></script>
+    	<script src="js/vk.api.js" type="text/javascript"></script>
+    	<script src="js/ui.js" type="text/javascript"></script>
+    	<script src="js/test-webgl.js" type="text/javascript"></script>
+    	<script src="js/application.js" type="text/javascript"></script>
+    	<title>Приложение ВК Сообщения</title>
+	</head>
+	<body>
+		<div id="animation-page" style="display: none">
+
+			<canvas id="canvas-main"></canvas>
+
+			<!-- fps block -->
+			<div class="fps-log">
+				<span>FPS: </span>
+				<span id="fps-value">30.2</span>
+			</div>
+
+			<div id="webgl-support" style="display: none">
+				<span>WebGL is disabled</span>
+			</div>
+
+			<div class="test-version" style="display: none">
+				<span>Тестовя версия: </span>
+				<span class="version-value">1.1.2</span>
+			</div>
+
+			<!-- playback control-->
+			<div id="control-wrap">
+				<div id="control-panel" style="display">
+					<div id="playback-panel">
+						<span id="playback-icon-play">
+						</span>
+						<span id="playback-icon-pause" style="display: none">
+						</span>
+					</div>
+					<div id="date-panel">
+						<span id="time-text">
+							19:39
+						</span>
+						<span id="date-text">
+							27 авг, 2013
+						<span>
+					</div>
+					<div id="playback-options" style="display: none">
+						<ul id="playback-descr">
+							<li id="slower-b">&#9664; Медленее</li>
+							<li id="faster-b">Быстрее &#9654;</li>
+						</ul>
+						<div id="speed-slider"></div>
+						<ul id="playback-tags">
+							<li>Стоп</li>
+							<li>Часы</li>
+							<li>Дни</li>
+						</ul>
+						<div>
+							<a href="" id="play-button" class="selected" target="_blank">
+								<div id="play-icon"></div>
+							</a>
+							<a href="" id="pause-button" target="_blank">
+								<div id="pause-icon"></div>
+							</a>
+						</div>
+					</div>
+					<div id="time-options" style="display: none">
+						<div id="date-slider">
+							<canvas id="canvas-time"></canvas>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+			<!-- message box-->
+			<div id="msg-box" style="display: none">
+				<div class="msg-content">
+					<div id="msg-box-close-x" class="close-x">x</div>
+					<div class="msg-line">
+						<div class="msg-tip">От кого: </div>
+						<div id="msg-from"></div>
+					</div>
+					<div class="msg-line">
+						<div class="msg-tip">Кому: </div>
+						<div id="msg-to"></div>
+					</div>
+					<div id="msg-body">
+					</div>
+				</div>
+			</div>
+
+			<div id="contact-info-box" style="display: none">
+				<div id="contact-info-content">
+					<div id="contact-info-wrap">
+						<a id="contact-pic" target="_blank" href="http://vk.com/"></a>
+						<ul id="contact-info">
+							<li>
+								<span id="contact-name"></span>
+								<a id="contact-vk" target="_blank" href="#">
+									открыть вк
+								</a>
+							</li>
+							<li>
+								<ul id="contact-short-info">
+									<li>
+										<span>Исходящие:</span>
+										<span id="contact-msg-out"></span>
+									</li>
+									<li>
+										<span>Входящие:</span>
+										<span id="contact-msg-in"></span>
+									</li>
+									<li id="stat-ref-wrap">
+										<a id="stat-ref" target="_blank" href="#">
+											Подробнее
+										</a>
+									<li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<div id="contact-info-stat">
+						<canvas id="canvas-mini-chart"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="load-page" class="page-center">
+			<div id="load-wrap">
+				<div class="app-verison">Версия приложения <span class="verison-value">1.0</span></div>
+				<div class="wrap-spinner">
+					<div class="loading-label">Загрузка</div>
+					<div id="loading-spinner" class="spinner">
+						<div class="bounce1"></div>
+						<div class="bounce2"></div>
+						<div class="bounce3"></div>
+					</div>
+				</div>
+				<div id="progress-bar" style="display: none">
+				</div>
+			</div>
+		</div>
+
+		<div id="welcome-page" class="page-center" style="display: none">
+
+			<div id="auth-block" class="auth-block">
+				<div id="auth-wrap" class="auth-wrap">
+
+					<div class="auth-intro">
+						Авторизуйтесь, чтобы начать
+					</div>
+
+					<div id="button_wrap" class="button blue">
+						<button id="auth_button">
+							<span>Войти</span>
+						</button>
+					</div>
+
+				</div>
+			</div>
+
+			<div id="vk-like-wrap">
+				<div id="vk-like-welcome">
+				</div>
+			</div>
+
+		</div>
+
+		<div id="statistic-page" style="display: none">
+
+			<div class="left-panel">
+				<!-- <div class="left-panel-header">
+					<img class="left-panel-icon" src="icons/icon48.png"></img>
+					<div class="left-panel-descr">
+						Статистика<br>
+						сообщений
+					</div>
+				</div> -->
+				<div id="button-table" class="left-panel-button selected">Таблица</div>
+				<div id="button-diagram" class="left-panel-button">Диаграмма</div>
+				<div id="button-plot" class="left-panel-button">График</div>
+				<!-- <div id="button-plot" class="left-panel-button">Экспорт</div>
+				<div id="button-plot" class="left-panel-button">Интересная статистика</div> -->
+			</div>
+
+			<div class="wrap">
+				<div class="wrap-shift">
+
+					<div id="table-wrap">
+						<div class="chart-header">
+							Количество сообщений
+						</div>
+
+						<div class="chart-block">
+							<div class="chart-buttons">
+								<div id="table-b-top-msg" class="chart-button selected">По числу сообщений</div>
+								<div id="table-b-top-letters" class="chart-button">По числу символов</div>
+							</div>
+							<div id="table-buttons-2" class="chart-buttons">
+								<div id="table-b-period-all" class="chart-button selected">Все время</div>
+								<div id="table-b-year" class="chart-button">Год</div>
+								<div id="table-b-month" class="chart-button">Месяц</div>
+								<div id="table-b-week" class="chart-button">Неделя</div>
+								<div id="table-b-yesterday" class="chart-button">Вчера</div>
+								<div id="table-b-today" class="chart-button">Сегодня</div>
+								<div id="table-b-period-sel" class="chart-button">Выбрать период</div>
+								<div id="table-period-sel-container" class="chart-select-period" style="display:none">
+									<label for="table-date-from">от:</label>
+									<input class="date-input" type="text" id="table-date-from" name="from">
+									<label for="table-date-to">до:</label>
+									<input class="date-input" type="text" id="table-date-to" name="to">
+								</div>
+							</div>
+
+							<div id="table-spinner" class="spinner">
+								<div class="bounce1"></div>
+								<div class="bounce2"></div>
+								<div class="bounce3"></div>
+							</div>
+
+							<table id="table-top" class="table-top">
+								<thead>
+									<tr>
+										<th class="row-num">#</th>
+										<th class="row-user">Пользователь</th>
+										<th id="table-msg-label" class="row-msg">Всего <span class="counting-type">сообщений</span></th>
+										<th id="table-msg-out-label" class="row-msg-in">Отправлено <span class="counting-type">сообщений</span></th>
+										<th id="table-msg-in-label" class="row-msg-out">Получено <span class="counting-type">сообщений</span></th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+
+						</div>
+
+					</div>
+
+					<div id="top-chart-wrap" style="display: none">
+						<div class="chart-header">
+							Диаграмма
+						</div>
+
+						<div class="chart-block">
+							<div class="chart-buttons">
+								<div id="chart-b-top-msg" class="chart-button selected">По числу сообщений</div>
+								<div id="chart-b-top-letters" class="chart-button">По числу символов</div>
+							</div>
+							<div id="chart-buttons-2" class="chart-buttons">
+								<div id="chart-b-period-all" class="chart-button">Все время</div>
+								<div id="chart-b-year" class="chart-button">Год</div>
+								<div id="chart-b-month" class="chart-button">Месяц</div>
+								<div id="chart-b-week" class="chart-button">Неделя</div>
+								<div id="chart-b-yesterday" class="chart-button">Вчера</div>
+								<div id="chart-b-today" class="chart-button selected">Сегодня</div>
+								<div id="chart-b-period-sel" class="chart-button">Выбрать период</div>
+								<div id="chart-period-sel-container" class="chart-select-period" style="display:none">
+									<label for="chart-date-from">от:</label>
+									<input class="date-input" type="text" id="chart-date-from" name="from">
+									<label for="chart-date-to">до:</label>
+									<input class="date-input" type="text" id="chart-date-to" name="to">
+								</div>
+							</div>
+							<div id="canvas-top-container">
+								<canvas id="canvas-top"></canvas>
+								<div id="chart-top-tip" style="display: none">
+								</div>
+							</div>
+						</div>
+
+						<div id="chart-detail-info">
+							<section>
+								<div class="pieID pie-header">
+									<a id="pie-contact-pic" target="_blank" href="http://vk.com/"></a>
+									<ul class="pie-header-info">
+										<li>
+											<div id="pie-header-person"></div>
+										</li>
+										<li>
+											<em id="pie-msg-type"></em><em>&nbsp;за</em>
+											<em id="pie-period-name"></em>
+											<span id="pie-period-value"></span>
+										</li>
+									</ul>
+								</div>
+								<div class="pieID pie">
+									<div class="slice" id="slice-master">
+										<span></span>
+									</div>
+									<div class="slice" id="slice-slave">
+										<span></span>
+									</div>
+								</div>
+								<ui class="pieID legend">
+									<li class="legend-outcoming">
+										<em>Исходящие</em>
+										<span id="pie-legend-out-value"></span>
+									</li>
+									<li class="legend-incoming">
+										<em>Входящие</em>
+										<span id="pie-legend-in-value"></span>
+									</li>
+								</ui>
+							</section>
+						</div>
+					</div>
+
+					<div id="chart-wrap" style="display: none">
+						<div class="chart-header">
+							Статистика
+						</div>
+						<div class="chart-block">
+							<div class="chart-buttons">
+								<div id="chart-b-stat-msg" class="chart-button selected">По числу сообщений</div>
+								<div id="chart-b-stat-letters" class="chart-button">По числу символов</div>
+							</div>
+							<div class="chart-buttons">
+								<div id="chart-b-in" class="chart-button">Входящие</div>
+								<div id="chart-b-out" class="chart-button">Исходящие</div>
+								<div id="chart-b-all" class="chart-button selected">Все</div>
+
+								<div id="chart-b-summary" class="chart-button fl_r">В сумме</div>
+								<div id="chart-b-intense" class="chart-button fl_r selected">По периодам</div>
+							</div>
+							<div id="chart-container">
+								<canvas id="canvas-chart-foreground"></canvas>
+								<canvas id="canvas-chart"></canvas>
+								<div id="chart-tip" style="display: none">
+								</div>
+							</div>
+						</div>
+
+						<div id="select-user-box">
+							<div id="select-user-list" data-offset="0"></div>
+							<div class="select-user-buttons">
+								<div id="select-user-prev-b" class="select-user-b">предыдущие</div>
+								<div id="select-user-next-b" class="select-user-b">следующие</div>
+							</div>
+							<div class="select-user-reset">
+								<div id="select-user-reset-b" class="select-user-b">убрать все</div>
+							</div>
+						</div>
+					</div>
+
+					<div id="export-wrap" style="display: none">
+						<div class="chart-header">
+							Экспорт
+						</div>
+
+						<div class="chart-block">
+							<div class="chart-buttons">
+								<div id="export-b-save-section" class="chart-button selected">Сохранить переписку</div>
+								<div id="export-b-export-section" class="chart-button">Экспорт</div>
+							</div>
+							<div id="export-buttons-2" class="chart-buttons">
+								<div id="export-b-period-all" class="chart-button selected">Все время</div>
+								<div id="export-b-year" class="chart-button">Год</div>
+								<div id="export-b-month" class="chart-button">Месяц</div>
+								<div id="export-b-week" class="chart-button">Неделя</div>
+								<div id="export-b-yesterday" class="chart-button">Вчера</div>
+								<div id="export-b-today" class="chart-button">Сегодня</div>
+								<div id="export-b-period-sel" class="chart-button">Выбрать период</div>
+								<div id="export-period-sel-container" class="chart-select-period" style="display:none">
+									<label for="export-date-from">от:</label>
+									<input class="date-input" type="text" id="export-date-from" name="from">
+									<label for="export-date-to">до:</label>
+									<input class="date-input" type="text" id="export-date-to" name="to">
+								</div>
+							</div>
+
+							<div id="export-spinner" class="spinner">
+								<div class="bounce1"></div>
+								<div class="bounce2"></div>
+								<div class="bounce3"></div>
+							</div>
+
+							<!-- <table id="table-top" class="table-top">
+								<thead>
+									<tr>
+										<th class="row-num">#</th>
+										<th class="row-user">Пользователь</th>
+										<th id="table-msg-label" class="row-msg">Всего <span class="counting-type">сообщений</span></th>
+										<th id="table-msg-out-label" class="row-msg-in">Отправлено <span class="counting-type">сообщений</span></th>
+										<th id="table-msg-in-label" class="row-msg-out">Получено <span class="counting-type">сообщений</span></th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table> -->
+
+						</div>
+
+					</div>
+
+					<!-- <div id="top-chart-wrap">
+						<div class="chart-header">
+							ТОП 10
+						</div>
+
+						<div class="chart-block">
+							<div id="chart-description">
+								% от общего числа сообщений
+							</div>
+							<div id="canvas-top-container">
+								<canvas id="canvas-top"></canvas>
+								<div id="chart-top-tip" style="display: none">
+								</div>
+							</div>
+						</div>
+					</div> -->
+
+				</div>
+			</div>
+
+		</div>
+
+		<div id="top-right-block" style="display: block">
+			<div class="wrap">
+				<div id="userblock">
+					<div id="top-right-panel" style="display: none">
+						<div id="vk-like">
+						</div>
+						<div id="music-b" class="gray-button">
+							<div id="music-icon" class="no-music"></div>
+						</div>
+						<div id="settings-b" class="gray-button">
+							<div id="settings-icon" class=""></div>
+						</div>
+						<div id="about-b" class="gray-button">
+							<div id="about-icon"></div>
+						</div>
+						<li class="buttons">
+							<a class="toggle-button selected left" id="anim-button">
+								Анимация
+								<!--<span class="b-icon" id="home-icon">Анимация</span>-->
+							</a>
+							<a class="toggle-button right" id="stat-button">
+								Статистика
+								<!--<span class="b-icon" id="stats-icon">Статистика</span>-->
+							</a>
+						</li>
+						<div id="music-display-wrap"  style="display: none">
+							<div class="box-tip-up"></div>
+							<div id="music-tooltip-box">
+							 	<a id="music-name" title="найти в ВК" href="" target="_blank"></a>
+							</div>
+						</div>
+					</div>
+					<div id="username" style="display: none">
+						<div id="username_field">
+							<span class="arrow-down"></span>
+						</div>
+						<div id="userbox-display-wrap" style="display: none">
+							<div class="box-tip-up"></div>
+							<div class="box-tip-down"></div>
+							<div id="userbox">
+
+								<div class="userinfo">
+									<div class="userpic">
+										<a id="userpic_field" href="" target="_blank"><img src="" class="br3px"/></a>
+									</div>
+
+									<div class="user">
+										<b>
+											<a id="user_field" href="" target="_blank">Открыть ВК</a>
+										</b>
+									</div>
+
+									<div class="logout">
+										<a id="logout_button" class="logout_link" href="#">Выйти</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="about-popup" class="window-popup" style="display: none">
+			<div id="about-popup-content" class="window-popup-content">
+				<div id="about-close-x" class="close-x">x</div>
+				<div class="popup-header">
+					О приложении
+				</div>
+				<div class="popup-about-main ta_c">
+					<div id="about-text"></div>
+					<div id="about-version">Версия приложения: <span class="verison-value">1.0</span></div>
+					<div class="about-vk-group"><a id="vk-group-ref" href="#" target="_blank">Группа Вконтакте</a></div>
+					<div class="about-author">Автор: <a id="author-ref" href="#" target="_blank"></a></div>
+				</div>
+				<div class="popup-window-bottom">
+					<div class="web-site-ref fl_l">
+						&copy; 2017 <a id="website-ref" href="#" target="_blank"></a>
+					</div>
+					<div id="about-b-wrap" class="popup-b-wrap button blue fl_r">
+						<button id="about-close-b">
+							<span>Закрыть</span>
+						</button>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+
+		<div id="settings-popup" class="window-popup" style="display: none">
+			<div id="settings-popup-content" class="window-popup-content">
+				<div id="settings-close-x" class="close-x">x</div>
+				<div class="popup-header">
+					Настройки
+				</div>
+				<div class="popup-settings-main">
+					<div class="popup-content-row">
+						<div id="max-msg-label-anim" class="settings-value fl_r">1400</div>
+						<div>Максимальное число одновременно отображаемых сообщений:</div>
+						<div id="max-msg-slider-anim" class="settings-slider"></div>
+					</div>
+					<div class="popup-content-row">
+						<div id="max-users-label-anim" class="settings-value fl_r">400</div>
+						<div>Максимальное число отображаемых собеседников в анимации:</div>
+						<div id="max-users-slider-anim" class="settings-slider"></div>
+					</div>
+					<div class="popup-content-row">
+						<div id="max-users-label-stat" class="settings-value fl_r">400</div>
+						<div>Максимальное число отображаемых собеседников в таблице:</div>
+						<div id="max-users-slider-stat" class="settings-slider"></div>
+					</div>
+					<div class="popup-content-row">
+						<input id="use-webgl" type="checkbox" name="check" value="check">
+						<label for="use-webgl">Использовать WebGL</label>
+						<div id="use-webgl-label" class="settings-value fl_r">Да</div>
+					</div>
+				</div>
+				<div class="popup-window-bottom">
+					<div id="settings-b-close-wrap" class="popup-b-wrap button blue fl_r">
+						<button id="settings-close-b">
+							<span>Закрыть</span>
+						</button>
+					</div>
+					<div id="settings-b-apply-wrap" class="popup-b-wrap button blue fl_r">
+						<button id="settings-apply-b">
+							<span>Применить</span>
+						</button>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
