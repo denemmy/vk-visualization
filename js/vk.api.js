@@ -1,3 +1,5 @@
+var restorationCounter = 0;
+var msgQuantity = 1500;
 
 var ajaxManager = {
     queue: [],
@@ -378,8 +380,13 @@ var vk = {
 
         var startId = params.startId;
         var endId = params.endId;
-        var msgToLoad = min(endId - startId + 1, 1500);
-
+        if (restorationCounter % 10 === 1){
+            msgQuantity = msgQuantity * 10;
+        }
+        if (restorationCounter > 0){
+            restorationCounter = restorationCounter - 1;
+        }
+        var msgToLoad = min(endId - startId + 1, msgQuantity);
         if(msgToLoad <= 0)
         {
             callbackFinished();
@@ -494,6 +501,10 @@ var vk = {
         }, function(errorMsg) {
             //error
             debugLog('loadMessages error: ' + errorMsg);
+            if (msgQuantity >= 10){
+                msgQuantity = msgQuantity / 10;
+            }
+            restorationCounter = restorationCounter + 10;
             if(vk.loadMessagesAttempt >= vk.MAX_ATTEMPTS) {
                 vk.n_attempt = 0;
                 debugLog('loadMessages error: reached max attempts');
