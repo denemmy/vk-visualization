@@ -27,7 +27,7 @@ var vk = {
     appId: 4388415,
     authScope: 'messages,offline',
     authRedirectUri: 'https://oauth.vk.com/blank.html',
-    versionAPI: "5.80",
+    versionAPI: "5.81",
 
     TIME_BETWEEN_REQUESTS: settings.VK_TIME_BETWEEN_REQUESTS,
     TIME_BETWEEN_FAILED_REQUESTS: 3000,
