@@ -68,7 +68,7 @@ var ui = {
         aboutCont.find('#vk-group-ref').attr('href', ABOUT.groupRef);
         aboutCont.find('#author-ref').html(ABOUT.author).attr('href', ABOUT.authorRef);
         aboutCont.find('#website-ref').html(ABOUT.websiteName).attr('href', ABOUT.website);
-        aboutCont.find('#pikabu-ref').html(ABOUT.pikabuNickname).attr('href', ABOUT.pikabuRef);
+        aboutCont.find('#donate-ref').attr('href', ABOUT.donateRef);
         var searchUrl = "http://vk.com/audio?q=" + ABOUT.musicAuthorName;
         $('#music-name').html(ABOUT.musicAuthorName).attr('href', searchUrl);
 

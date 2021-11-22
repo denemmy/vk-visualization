@@ -23,8 +23,8 @@
 
   "minimum_chrome_version": "27",
   "permissions": [
-    "tabs", "*://*.userapi.com/*", "*://api.vk.com/*", "*://*.vk.me/*", "*://mc.yandex.ru/*", "*://vk.com/images/*", "storage", "unlimitedStorage"
+    "tabs", "*://*.userapi.com/*", "*://api.vk.com/*", "*://*.vk.me/*", "*://vk.com/images/*", "storage", "unlimitedStorage"
   ],
   "update_url": "https://clients2.google.com/service/update2/crx",
-  "version": "1.1.7"
+  "version": "1.1.8"
 }

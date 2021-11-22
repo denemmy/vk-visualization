@@ -65,10 +65,11 @@ var SYS = {
 var ABOUT = {
 	version: chrome.runtime.getManifest().version,
 	description: "Визуализация и статистика сообщений в социальной сети Вконтакте",
-	groupRef: "http://vk.com/vkstats",
+	groupRef: "https://vk.com/vkstats",
 	author: "Данил Галеев",
-	authorRef: "http://vk.com/denemmy",
-	website: "http://www.denemmy.com",
+	authorRef: "https://vk.com/random_name_d",
+	website: "https://www.denemmy.com",
 	websiteName: "denemmy.com",
-	musicAuthorName: "N'to - Trauma (Worakls Remix)"
+	musicAuthorName: "N'to - Trauma (Worakls Remix)",
+	donateRef: "https://www.tinkoff.ru/cf/YBtQKEcQeG"
 }

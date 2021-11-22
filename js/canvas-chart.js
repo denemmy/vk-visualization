@@ -197,8 +197,6 @@ canvas_chart = (function(){
         if(!inited) return;
         var container = $('#chart-container');
 
-        
-
         var width = container.width();
         var height = container.height();
         var offsetPos = container.offset();
@@ -764,9 +762,11 @@ canvas_chart = (function(){
         emptyMsgData = true;
 
         canvas = document.getElementById(canvasId);
-        inited = true;
 
         bindHandlers();
+        computeMaxValue();
+
+        inited = true;
     }
 
     function bindHandlers() {
