@@ -57,7 +57,7 @@ var userSettings = {
 
 
 var SYS = {
-	googleAnaliticsID: 'UA-52457387-1',
+	googleAnaliticsID: "",
 	vkAppID: 4388415,
 	vkWidgetAppId: 4447737
 }
@@ -66,10 +66,10 @@ var ABOUT = {
 	version: chrome.runtime.getManifest().version,
 	description: "Визуализация и статистика сообщений в социальной сети Вконтакте",
 	groupRef: "https://vk.com/vkstats",
-	author: "Данил Галеев",
-	authorRef: "https://vk.com/random_name_d",
-	website: "https://www.denemmy.com",
-	websiteName: "denemmy.com",
+	author: "",
+	authorRef: "",
+	website: "",
+	websiteName: "",
 	musicAuthorName: "N'to - Trauma (Worakls Remix)",
-	donateRef: "https://www.tinkoff.ru/cf/YBtQKEcQeG"
+	donateRef: ""
 }
