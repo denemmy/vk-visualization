@@ -378,7 +378,7 @@ var vk = {
 
         var startId = params.startId;
         var endId = params.endId;
-        var msgToLoad = min(endId - startId + 1, 1500);
+        var msgToLoad = min(endId - startId + 1, 100);
 
         if(msgToLoad <= 0)
         {
